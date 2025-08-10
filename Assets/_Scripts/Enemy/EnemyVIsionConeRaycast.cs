@@ -7,15 +7,20 @@ public class EnemyVisionConeRaycast : MonoBehaviour
 {
     [SerializeField] private SO_EnemyData _enemyData;
 
-    [SerializeField] private LayerMask _obstructionMask;
-    [SerializeField] private LayerMask _playerMask;
+    //[SerializeField] private LayerMask _obstructionMask;
+    //[SerializeField] private LayerMask _playerMask;
 
     [SerializeField] private float _radiusOrigin = 1f; // distanza dell'origine del raggio dall'occhio del nemico
 
+
     private AbstractEnemy _enemy;
-    private LineRenderer _lineRenderer; 
+    private LineRenderer _lineRenderer;
+
+    public Transform _playerTransform { get; private set; } // riferimento al player, se visto
 
     public bool playerInSight { get; private set; }
+
+    private float timer;
 
     public void SetPlayerInSight(bool value)
     {
@@ -70,63 +75,77 @@ public class EnemyVisionConeRaycast : MonoBehaviour
 
     void Update()
     {
-        CheckForPlayer();
+        //CheckForPlayer();
         DrawVisionCone();
+        _enemy.SetEnemyState(EvaluatEnemyState()); // Aggiorna lo stato del nemico in base alla visione del player
 
-        if (playerInSight)
-        {
-            Debug.Log("Player avvistato!");
-            _enemy.SetEnemyState(AbstractEnemy.EnemyState.CHASE); // Cambia lo stato del nemico a inseguimento
-        }
-        else if (!playerInSight && _wasPlayerInSight)
-        {
-            _enemy.SetEnemyState(AbstractEnemy.EnemyState.SEARCH); // se il player non è visto ma era visto, cambia stato a ricerca
-        }
+
+        //if (CheckForPlayer())
+        //{
+        //    Debug.Log("Player avvistato!");
+        //    _enemy.SetEnemyState(AbstractEnemy.EnemyState.CHASE); // Cambia lo stato del nemico a inseguimento
+        //}
+        //else if (!playerInSight && _wasPlayerInSight)
+        //{
+        //    timer += Time.deltaTime;
+        //    if (timer >= _enemyData.lastSeenTime && !playerInSight)
+        //    {
+        //        timer = 0f; // resetta il timer
+        //        _enemy.SetEnemyState(AbstractEnemy.EnemyState.SEARCH); // se il player non è visto ma era visto, cambia stato a ricerca
+        //    }
+        //    else if (timer >= _enemyData.lastSeenTime && playerInSight)
+        //    {
+        //        _enemy.SetEnemyState(AbstractEnemy.EnemyState.CHASE);
+        //    }
+        //}
     }
-
     public bool CheckForPlayer()
     {
-        //_wasPlayerInSight = playerInSight; // Salva lo stato precedente del player
-
         float angleStep = _enemyData.viewAngle / _enemyData.rayCount;
         float startAngle = -_enemyData.viewAngle / 2f;
+        Vector3 origin = transform.position + Vector3.up * _radiusOrigin;
 
-        Vector3 origin = transform.position + Vector3.up * _radiusOrigin; // occhio del nemico
+        bool seen = false;
+        Transform playerHit = null;
 
         for (int i = 0; i <= _enemyData.rayCount; i++)
         {
             float angle = startAngle + angleStep * i;
             Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
 
-            // Raycast contro il mondo
-            if (Physics.Raycast(origin, dir, out RaycastHit hit, _enemyData.viewRadius, _obstructionMask | _playerMask))
+            if (Physics.Raycast(origin, dir, out RaycastHit hit, _enemyData.viewRadius, _enemyData.obstructionMask | _enemyData.playerMask))
             {
-                if (((1 << hit.collider.gameObject.layer) & _playerMask) != 0 && hit.collider.CompareTag("Player"))
+                if (((1 << hit.collider.gameObject.layer) & _enemyData.playerMask) != 0 && hit.collider.CompareTag("Player"))
                 {
-                    playerInSight = true;
-                    _wasPlayerInSight = playerInSight;
-                    _lastKnownPos = hit.collider.transform;
-                    Debug.DrawLine(origin, hit.point, Color.red); // hit player
-                    _lastKnownPos = hit.collider.transform; // aggiorna l'ultima posizione vista del player
-                    return playerInSight; // non serve continuare, il player è visto
+                    Debug.DrawLine(origin, hit.point, Color.red);
+                    seen = true;
+                    playerHit = hit.collider.transform;
+                    break;
                 }
                 else
                 {
-                    Debug.DrawLine(origin, hit.point, Color.yellow); // ostacolo
-                    playerInSight = false;  // se colpisce un ostacolo, il player non è visto
+                    Debug.DrawLine(origin, hit.point, Color.yellow);
                 }
-                
             }
-
             else
             {
-                Debug.DrawLine(origin, origin + dir * _enemyData.viewRadius, Color.gray); // niente colpito
-                playerInSight = false; // se non colpisce nulla, il player non è visto
-                return playerInSight;
+                Debug.DrawLine(origin, origin + dir * _enemyData.viewRadius, Color.gray);
             }
-            
         }
-        return playerInSight; // ritorna lo stato del player
+
+        playerInSight = seen;
+        if (seen)
+        {
+            _wasPlayerInSight = true;
+            _playerTransform = playerHit;
+            _lastKnownPos = playerHit;
+        }
+        else
+        {
+            _playerTransform = null;
+        }
+
+        return playerInSight;
     }
 
     public void DrawVisionCone()
@@ -144,5 +163,19 @@ public class EnemyVisionConeRaycast : MonoBehaviour
 
             _lineRenderer.SetPosition(i + 1, point);
         }
+    }
+
+    public AbstractEnemy.EnemyState EvaluatEnemyState()
+    {
+        CheckForPlayer(); // Aggiorna lo stato del player
+        if (playerInSight)
+        {
+            return AbstractEnemy.EnemyState.CHASE; // Se il player è visto, cambia stato a inseguimento
+        }
+        else if (!playerInSight && _wasPlayerInSight)
+        {
+            return AbstractEnemy.EnemyState.SEARCH; // Se il player non è visto ma era visto, cambia stato a ricerca
+        }
+        return AbstractEnemy.EnemyState.BASE; // Altrimenti, torna allo stato di pattuglia
     }
 }

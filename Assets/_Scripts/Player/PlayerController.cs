@@ -91,6 +91,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 _playerInput = new Vector3(horizontal, 0, vertical).normalized;
 
+        //questo è per far muovere il player nella direzione della camera
         Vector3 camForward = _cam.transform.forward;
         Vector3 camRight = _cam.transform.right;
         camForward.y = 0;
