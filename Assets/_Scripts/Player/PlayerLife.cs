@@ -13,11 +13,13 @@ public class PlayerLife : MonoBehaviour
 
     public Action<int> OnLifeChanged;
 
+    public Action OnPlayerDeath;
+
     private void Awake()
     {
         if (playerLifeInstance != null && playerLifeInstance != this)
         {
-            Destroy(playerLifeInstance.gameObject);
+            Destroy(this);
             return;
         }
         else        
@@ -31,8 +33,11 @@ public class PlayerLife : MonoBehaviour
 
     public void LoseLife()
     {
+
+        Debug.Log("Player lost a life!");
         this._lives--;
         _lives = Mathf.Max(0, _lives);
+        Debug.Log(_lives);
 
         if (this._lives <= 0)
         {
@@ -53,11 +58,14 @@ public class PlayerLife : MonoBehaviour
 
     public void RestartGame()
     {
-
+        Debug.Log("Restarting...");
+        OnPlayerDeath?.Invoke();
     }
     public void RestartScene()
     {
-        _lives = _livesOnStart;
+        Debug.Log("Restarting scene...");
+        OnPlayerDeath?.Invoke();
+        //_lives = _livesOnStart;
     }
     public void GoBackToMainMenu()
     {

@@ -1,8 +1,11 @@
 
 using System;
+using UnityEngine;
 
 public interface iInteractable
 {
-    public void Interact(Action <string, float> uiText);
+    public void Interact();
+
+    public bool IsInRange();
 }
 

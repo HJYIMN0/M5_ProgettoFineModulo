@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private float h;
     private float v;
+
 
 
     private void Awake()
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Fire1")) //left mouse button
         {
             Move();
+            
         }
 
         if (!_controlState.Equals(PlayerControlState.MOUSE))
@@ -50,12 +53,13 @@ public class PlayerController : MonoBehaviour
             h = Input.GetAxis("Horizontal");
             v = Input.GetAxis("Vertical");
 
-            Move();
+            Move();           
         }
     }
 
     public void Move()
     {
+
         switch (_controlState)
         {
             case PlayerControlState.HYBRID:

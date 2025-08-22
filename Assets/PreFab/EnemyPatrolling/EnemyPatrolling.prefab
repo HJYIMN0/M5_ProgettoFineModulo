@@ -72,8 +72,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
+  _gizmoOrigin: {fileID: 8506029679260255037}
   _enemyData: {fileID: 11400000, guid: a8e222c48adcbf2478758428ee6da802, type: 2}
-  _patrolPoints: []
+  _patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _hasUiText: 1
 --- !u!120 &7896563229678027849
 LineRenderer:
   serializedVersion: 2
@@ -191,12 +197,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyData: {fileID: 11400000, guid: a8e222c48adcbf2478758428ee6da802, type: 2}
-  _obstructionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _playerMask:
-    serializedVersion: 2
-    m_Bits: 8
   _radiusOrigin: 0.59
 --- !u!1 &3028909022217054702
 GameObject:
@@ -229,7 +229,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8506029679260255037}
   m_Father: {fileID: 1984475290755427629}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1323755282347053462
@@ -305,6 +306,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3146305100816568914
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8506029679260255037}
+  m_Layer: 6
+  m_Name: GizmoTransfrom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8506029679260255037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3146305100816568914}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.14, z: 1.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4498822120481967728}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7091377894498453066
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 482405043232697698}
   m_Layer: 6
-  m_Name: EnemyRay
+  m_Name: EnemyPatrolling
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -10,13 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a79997fe0760994fbee503db970e9df, type: 3}
-  m_Name: Enemy01
+  m_Name: EnemyStationary
   m_EditorClassIdentifier: 
-  enemyName: Dato01
+  enemyName: Stationary Enemy
   hp: 0
   speed: 2.5
-  speedMultiplier: 0
+  speedMultiplier: 1.25
   damage: 0
   viewRadius: 10
-  rayCount: 12
-  viewAngle: 92
+  rayCount: 11
+  Ui_alpha: 0.8
+  Ui_text: "Questo \xE8 un testo di prova"
+  viewAngle: 90
+  coroutineTime: 4.5
+  lastSeenTime: 1.5
+  interactionRadius: 1.45
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 128
+  acceptedDistance: 0.5
+  rotationSpeed: 125

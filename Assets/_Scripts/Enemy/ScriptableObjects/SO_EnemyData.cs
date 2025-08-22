@@ -19,6 +19,7 @@ public class SO_EnemyData : ScriptableObject
     public int rayCount;
 
     public float Ui_alpha = 0.8f;
+    public string Ui_text = "Questo è un testo di prova";
 
     [Range(0,360)] public float viewAngle;
 
@@ -30,6 +31,11 @@ public class SO_EnemyData : ScriptableObject
 
     public LayerMask playerMask;
     public LayerMask obstructionMask;
+
+    public float acceptedDistance = 0.25f;
+
+    public float rotationSpeed = 90f; // gradi/sec per la rotazione del nemico
+
 
 
 }
