@@ -6,9 +6,9 @@ using UnityEngine.AI;
 
 public class MovingPlatform : MonoBehaviour
 {
-    ButtonInteraction _buttonInteraction;
+    [SerializeField] ButtonInteraction _buttonInteraction;
     private bool isMoving;
-    private NavMeshSurface _navMesh;
+    [SerializeField] private NavMeshSurface _navMesh;
 
     [SerializeField] private Transform _elevator;
     [SerializeField] private Transform finalPos;
@@ -19,11 +19,14 @@ public class MovingPlatform : MonoBehaviour
 
 
     private void Awake()
-    {
-        _navMesh = GetComponent<NavMeshSurface>();
+    {        
         if (_navMesh == null)
         {
-            Debug.LogError("NavMeshSurface component not found on the GameObject.");
+            _navMesh = GetComponentInParent<NavMeshSurface>();
+            if (_navMesh == null)
+            {
+                Debug.LogError("NavMeshSurface component not found in parent GameObjects.");
+            }
         }
     }
     private void Start()

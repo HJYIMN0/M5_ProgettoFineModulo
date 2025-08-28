@@ -20,7 +20,7 @@ public class EnemyStationary : AbstractEnemy
     {
         if (startPos == null)
         {
-            Debug.LogError("Start position is not assigned for the stationary enemy.");
+            Debug.Log("Start position is not assigned for the stationary enemy.");
             return;
         }
         base.Setup();        
@@ -34,6 +34,7 @@ public class EnemyStationary : AbstractEnemy
         {
             Rotate();
         }
+        Interact();
     }
 
     public void Rotate()

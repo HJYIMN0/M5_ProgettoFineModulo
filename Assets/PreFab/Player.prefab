@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 5420951814524248986}
   - component: {fileID: 8819964323012989224}
   - component: {fileID: 4021112305726575602}
-  - component: {fileID: 3946702106392295677}
+  - component: {fileID: 1395255482486980907}
   m_Layer: 3
   m_Name: Logic
   m_TagString: Player
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cam: {fileID: 0}
---- !u!114 &3946702106392295677
+--- !u!114 &1395255482486980907
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -389,3 +389,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lives: 3
   _livesOnStart: 3
+  isAlive: 1

@@ -5,13 +5,16 @@ using UnityEngine;
 public class ButtonUI : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _canva;
-
-    private ButtonInteraction _button;
+    [SerializeField]private ButtonInteraction _button;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !_button.hasBeenInteracted)
         {
             _canva.alpha = 1f;
+        }
+        else if (other == null)
+        {
+            Debug.LogError("Collider is null.");
         }
     }
 
