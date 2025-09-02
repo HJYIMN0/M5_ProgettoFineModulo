@@ -78,26 +78,6 @@ public class EnemyVisionConeRaycast : MonoBehaviour
         //CheckForPlayer();
         DrawVisionCone();
         _enemy.SetEnemyState(EvaluatEnemyState()); // Aggiorna lo stato del nemico in base alla visione del player
-
-
-        //if (CheckForPlayer())
-        //{
-        //    Debug.Log("Player avvistato!");
-        //    _enemy.SetEnemyState(AbstractEnemy.EnemyState.CHASE); // Cambia lo stato del nemico a inseguimento
-        //}
-        //else if (!playerInSight && _wasPlayerInSight)
-        //{
-        //    timer += Time.deltaTime;
-        //    if (timer >= _enemyData.lastSeenTime && !playerInSight)
-        //    {
-        //        timer = 0f; // resetta il timer
-        //        _enemy.SetEnemyState(AbstractEnemy.EnemyState.SEARCH); // se il player non è visto ma era visto, cambia stato a ricerca
-        //    }
-        //    else if (timer >= _enemyData.lastSeenTime && playerInSight)
-        //    {
-        //        _enemy.SetEnemyState(AbstractEnemy.EnemyState.CHASE);
-        //    }
-        //}
     }
     public bool CheckForPlayer()
     {

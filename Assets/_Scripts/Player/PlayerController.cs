@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     private float h;
     private float v;
 
+    private bool isMoving => _agent.velocity.magnitude > 0.1f;
+    
+    public bool IsMoving => isMoving;
+
 
 
     private void Awake()
@@ -85,6 +89,10 @@ public class PlayerController : MonoBehaviour
             _agent.ResetPath();
             MoveKeyboard(h,v);
         }
+        else
+        {
+            _agent.ResetPath();
+        }
     }
 
     public void MoveKeyboard(float horizontal, float vertical)
@@ -96,6 +104,7 @@ public class PlayerController : MonoBehaviour
         Vector3 _playerInput = new Vector3(horizontal, 0, vertical).normalized;
 
         //questo è per far muovere il player nella direzione della camera
+        //Mi sono accorto dopo che avrei impostato la camera Dall'alto e quindi non serviva
         Vector3 camForward = _cam.transform.forward;
         Vector3 camRight = _cam.transform.right;
         camForward.y = 0;

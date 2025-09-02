@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ButtonInteraction : MonoBehaviour
+public class ButtonInteraction : MonoBehaviour, iInteractable
 {
 
     public UnityEvent OnButtonPressed;
@@ -35,12 +35,22 @@ public class ButtonInteraction : MonoBehaviour
     private void Update()
     {
 
-        if (isNearby && Input.GetButtonDown("Jump"))
+        if (IsInRange() && Input.GetButtonDown("Jump"))
         {
-            Debug.Log("Button pressed");
-            OnButtonPressed?.Invoke();
-            hasBeenInteracted = true;
+            Interact();
         }
-
     }
+
+    public void Interact()
+    {
+        Debug.Log("Button pressed");
+        OnButtonPressed?.Invoke();
+        hasBeenInteracted = true;
+    }
+
+    public bool IsInRange()
+    {
+        return isNearby;
+    }
+
 }
