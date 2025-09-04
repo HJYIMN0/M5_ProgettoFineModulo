@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private float h;
     private float v;
 
-    private bool isMoving => _agent.velocity.magnitude > 0.1f;
+    private bool isMoving;
     
     public bool IsMoving => isMoving;
 
@@ -36,68 +36,46 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire3")) //left Shift
+
+        if (Input.GetButtonDown("Fire3"))
         {
             index++;
             if (index > 2) index = 0;
-
             _controlState = (PlayerControlState)index;
-
             Debug.Log("Control State Changed: " + _controlState);
         }
 
-        if (Input.GetButtonDown("Fire1")) //left mouse button
+        if (_controlState != PlayerControlState.KEYBOARD && Input.GetMouseButtonDown(0)) //Mouse
         {
-            Move();
-            
+            MoveMouse();
         }
 
-        if (!_controlState.Equals(PlayerControlState.MOUSE))
+        if (_controlState != PlayerControlState.MOUSE) //tastiera
         {
-            h = Input.GetAxis("Horizontal");
-            v = Input.GetAxis("Vertical");
+            h = Input.GetAxisRaw("Horizontal");
+            v = Input.GetAxisRaw("Vertical");
 
-            Move();           
-        }
-    }
-
-    public void Move()
-    {
-
-        switch (_controlState)
-        {
-            case PlayerControlState.HYBRID:
-                _agent.ResetPath();
-                MoveHybrid();
-                break;
-            case PlayerControlState.KEYBOARD:
-                _agent.ResetPath();
+            if (h != 0 || v != 0)
+            {
+                if (_agent.hasPath) _agent.ResetPath();
                 MoveKeyboard(h, v);
-                break;
-            case PlayerControlState.MOUSE:
-                _agent.ResetPath();
-                MoveMouse();
-                break;
+                isMoving = true;
+            }
+            else isMoving = false;
         }
-    }
 
-    public void MoveHybrid()
-    {
-        MoveMouse();
-        if (h != 0 || v != 0)
-        {
-            _agent.ResetPath();
-            MoveKeyboard(h,v);
-        }
-        else
-        {
-            _agent.ResetPath();
-        }
+        bool hasRemainingPath = _agent.hasPath && _agent.remainingDistance > _agent.stoppingDistance;
+        if (h != 0 || v != 0) hasRemainingPath = true;
+               
+        isMoving = !_agent.isStopped && (_agent.velocity.sqrMagnitude > 0.0001f || hasRemainingPath);     
     }
 
     public void MoveKeyboard(float horizontal, float vertical)
     {
-        if (h == 0 && v == 0) return;
+        if (h == 0 && v == 0)
+        {
+            return;
+        }
 
         _agent.ResetPath();
 
@@ -114,8 +92,8 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveDir = (camForward * _playerInput.z + camRight * _playerInput.x).normalized;
 
-        // Muove l'agente in tempo reale, rispettando il NavMesh
         _agent.Move(moveDir * _agent.speed * Time.deltaTime);
+
 
         // Ruota il personaggio nella direzione di movimento
         if (moveDir != Vector3.zero)
@@ -132,6 +110,7 @@ public class PlayerController : MonoBehaviour
                 _agent.SetDestination(hit.point);
             }
         }
+
     }
 
     public enum PlayerControlState

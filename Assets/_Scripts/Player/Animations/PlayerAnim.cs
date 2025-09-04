@@ -15,15 +15,10 @@ public class PlayerAnim : MonoBehaviour
             Debug.LogError("PlayerController component not found on the GameObject.");
         }
 
-        _animator = GetComponent<Animator>();
-        if (_animator == null)
+        _animator = GetComponentInChildren<Animator>();
+        if (_animator != null)
         {
-            Debug.LogError("Animator component not found on the GameObject.");
-            _animator = GetComponentInChildren<Animator>();
-            if (_animator != null)
-            {
-                Debug.Log("Animator found in children of the GameObject.");
-            }
+            Debug.Log("Animator found in children of the GameObject.");
         }
     }
 
